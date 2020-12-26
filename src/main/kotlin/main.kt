@@ -1,42 +1,33 @@
 fun main() {
-    val seconds: Int = 61
-    agoToText(seconds)
+
+    agoToText(60)
+
 }
 
-fun agoToText(seconds: Int) {
-
-    when (seconds) {
-        in 0..60 -> println("был(а) только что")
-        in 61..60 * 60 -> minutes(seconds)
-        in 60 * 60 + 1..24 * 60 * 60 -> hours(seconds)
-        in 24 * 60 * 60 + 1..24 * 60 * 60 * 2 -> println("был(а) сегодня")
-        in 24 * 60 * 60 * 2 + 1..24 * 60 * 60 * 3 -> println("был(а) вчера")
-        else -> println("был(а) давно")
+fun agoToText(secondsAgo: Int) {
+    when (secondsAgo) {
+        in 0 until 60 -> println("Был(а) в сети только что")
+        in 60 until 60 * 60 -> calcMinute(secondsAgo)
+        in 60 * 60 until 24 * 60 * 60 -> calcHour(secondsAgo)
+        in 24 * 60 * 60 until 2 * 24 * 60 * 60 -> println("Был(а) в сети сегодня")
+        in 2 * 24 * 60 * 60 until 3 * 24 * 60 * 60 -> println("Был(а) в сети вчера")
+        else -> println("Был(а) в сети давно")
     }
 }
 
-fun minutes(seconds: Int) {
-    if (seconds >= 11 * 60 && seconds < 12 * 60) {
-        println("был(а) 11 минут назад")
-    } else {
-
-        val minute: Int = seconds / 60
-        val minuteStr = minute.toString()
-
-        if (minuteStr[minuteStr.lastIndex].toString() == "1") {
-            println("был(а) $minute минуту назад")
-        } else {
-            println("был(а) $minute минут назад")
-        }
+fun calcMinute(secondsAgo: Int) {
+    when (val minutesAgo = secondsAgo / 60) {
+        1, 21, 31, 41, 51 -> println("Был(а) в сети $minutesAgo минуту назад")
+        2, 3, 4, 22, 23, 24, 32, 33, 34, 42, 43, 44, 52, 53, 54 -> println("Был(а) в сети $minutesAgo минуты назад")
+        else -> println("Был(а) в сети $minutesAgo минут назад")
     }
 }
 
-fun hours(seconds: Int) {
+fun calcHour(secondsAgo: Int) {
+    when (val hoursAgo = secondsAgo / (60 * 60)) {
+        1, 21 -> println("Был(а) в сети $hoursAgo час назад")
+        2, 3, 4, 22, 23 -> println("Был(а) в сети $hoursAgo часа назад")
+        else -> println("Был(а) в сети $hoursAgo часов назад")
 
-    when (val hour: Int = seconds / 60 / 24) {
-        1 -> println("был(а) $hour час назад")
-        in 2..4 -> println("был(а) $hour часа назад")
-        in 5..20 -> println("был(а) $hour часов назад")
-        in 2..24 -> println("был(а) $hour часа назад")
     }
 }
